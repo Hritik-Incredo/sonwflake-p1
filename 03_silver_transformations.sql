@@ -1,0 +1,116 @@
+USE DATABASE PORTS_DB;
+USE SCHEMA SILVER;
+
+
+CREATE OR REPLACE TABLE CONTAINER_MOVEMENT_TRANSFORMED 
+(
+    container_id STRING,
+    shipment_id STRING,
+    terminal_id STRING,
+    arrival_time TIMESTAMP,
+    departure_time TIMESTAMP,
+    status STRING,
+    gate_id STRING,
+    crane_id STRING,
+    weight_kg NUMBER,
+    dwell_hours NUMBER
+);
+
+
+
+CREATE OR REPLACE TABLE SHIPMENT_DETAILS_TRANSFORMED 
+(
+    shipment_id STRING,
+    vessel_name STRING,
+    carrier STRING,
+    origin_port STRING,
+    destination_port STRING,
+    eta TIMESTAMP,
+    etd TIMESTAMP,
+    voyage_no STRING
+);
+
+
+
+
+CREATE OR REPLACE TABLE CUSTOMS_DATA_TRANSFORMED 
+(
+    container_id STRING,
+    import_export STRING,
+    clearance_status STRING,
+    clearance_time TIMESTAMP,
+    officer_id STRING,
+    tariff_code STRING
+);
+
+
+
+
+CREATE OR REPLACE TABLE CONTAINER_MOVEMENT_TRANSFORMED_CLEAN
+AS
+SELECT * 
+FROM CONTAINER_MOVEMENT_TRANSFORMED
+WHERE 1 = 0;
+
+
+
+
+CREATE OR REPLACE TABLE CONTAINER_MOVEMENT_TRANSFORMED_ERROR
+AS
+    SELECT
+        *,
+        CURRENT_TIMESTAMP AS error_logged_time,
+        CAST(NULL AS STRING) AS error_reason
+    FROM
+        CONTAINER_MOVEMENT_TRANSFORMED
+    WHERE 1 = 0;
+
+
+    
+
+CREATE OR REPLACE TABLE SHIPMENT_DETAILS_TRANSFORMED_CLEAN
+AS
+    SELECT
+        *
+    FROM
+        SHIPMENT_DETAILS_TRANSFORMED
+    WHERE 1 = 0;
+
+
+    
+
+CREATE OR REPLACE TABLE SHIPMENT_DETAILS_TRANSFORMED_ERROR
+AS
+SELECT
+        *,
+        CURRENT_TIMESTAMP AS error_logged_time,
+        CAST(NULL AS STRING) AS error_reason
+    FROM
+        SHIPMENT_DETAILS_TRANSFORMED
+    WHERE 1 = 0;
+
+
+    
+
+CREATE OR REPLACE TABLE CUSTOMS_DATA_TRANSFORMED_CLEAN
+AS
+    SELECT
+        *
+    FROM
+        CUSTOMS_DATA_TRANSFORMED
+    WHERE 1 = 0;
+
+
+    
+CREATE OR REPLACE TABLE CUSTOMS_DATA_TRANSFORMED_ERROR
+AS
+    SELECT
+        *,
+        CURRENT_TIMESTAMP AS error_logged_time,
+        CAST(NULL AS STRING) AS error_reason
+    FROM
+       CUSTOMS_DATA_TRANSFORMED
+       WHERE 1 = 0;
+
+
+
